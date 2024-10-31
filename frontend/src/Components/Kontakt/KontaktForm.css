@@ -1,0 +1,109 @@
+.KredytyBack{
+    padding-top: 4.5%;
+    background-color: #FFA07A;
+    height: 100%;
+}
+
+.KredytyInput:invalid {
+    border-color: red;
+    outline: none;
+    box-shadow: 0 0 2px red;
+}
+.KredytyInput:required:valid {
+    border-color: #4dcc23;
+    outline: none;
+    box-shadow: 0 0 2px #4dcc23;
+}
+.KredytyInput:invalid,
+.KredytyText:invalid {
+    border-color: red;
+    outline: none;
+    box-shadow: 0 0 2px red;
+}
+
+.KredytyInput:required:valid,
+.KredytyText:required:valid {
+    border-color: #4dcc23;
+    outline: none;
+    box-shadow: 0 0 2px #4dcc23;
+}
+/* jeżeli pole jest błędne ale i nie pokazuje placeholdera */
+.KredytyInput:not(:placeholder-shown):invalid,
+.KredytyText:not(:placeholder-shown):invalid {
+    border-color: red;
+    outline: none;
+    box-shadow: 0 0 2px red;
+}
+
+.KredytyInput:not(:placeholder-shown):required:valid,
+.KredytyText:not(:placeholder-shown):required:valid {
+    border-color: #4dcc23;
+    outline: none;
+    box-shadow: 0 0 2px #4dcc23;
+}
+.KredytyInput {}
+.form-error-text {
+    display: none;
+}
+.KredytyInput:not(:placeholder-shown):invalid {
+    border-color: tomato;
+    outline: none;
+    box-shadow: 0 0 2px tomato;
+}
+.KredytyInput:not(:placeholder-shown):invalid ~ .form-error-text {
+    display: block;
+}
+.KredytyInput:not(:placeholder-shown):required:valid {
+    border-color: #4dcc23;
+    outline: none;
+    box-shadow: 0 0 2px #4dcc23;
+}
+.KredytyInput:not(:placeholder-shown):required:valid ~ .form-error-text {
+    display: none;
+}
+.form-message {
+    color: tomato;
+    padding: 10px 0;
+}
+.form-message .KredytyH3 {
+    font-size: 1rem;
+    margin-bottom: 0.2rem;
+    margin-top: 0;
+}
+.form-message .KredytyUl {
+    list-style: none;
+    font-size: 0.8rem;
+    margin:0 0 1rem;
+    padding-left: 0;
+}
+.form-error-text {
+    color: tomato;
+    font-size: 0.8rem;
+}
+.form-error-inline .form-error-text {
+    display: none;
+}
+.KredytyH1{
+    text-align: center;
+    font-weight: bold;
+    padding: 20px;
+    font-size: 42px;
+    font-family: 'Times New Roman';
+}
+.KredytyH2{
+    text-align: center;
+    font-family: 'Times New Roman';
+    padding: 20px;
+    font-size: 25px;
+}
+.KredytyH3{
+    font-weight: bold;
+    text-decoration: underline;
+}
+.form-row{
+    text-align: center;
+    font-size: 28px;
+}
+.submit-btn{
+    font-weight: bold;
+}

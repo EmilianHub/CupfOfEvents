@@ -1,0 +1,79 @@
+.ProfilCont{
+    padding-top: 7%;
+    display: block;
+    max-width: 800px;
+    text-align: center;
+    margin-left: 14%;
+
+}
+.cala{
+    background-color: #FFEBCD;
+    height: 910px;
+}
+.profilH1{
+    font-weight: bold;
+    font-size: 44px;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: center;
+    margin-left: 14%;
+}
+.cth{
+    font-size: 32px;
+    border: 3px solid black;
+    margin: 4px;
+    text-align: center;
+    background: greenyellow;
+    font-weight: 800;
+    padding: 3px;
+}
+.profilTable{
+    text-align: center;
+    font-weight: 500;
+    display: block;
+    padding-left: 2px;
+    padding-bottom: 8px;
+    #margin-right: auto;
+    #margin-left: auto;
+}
+.ctd{
+    font-size: 26px;
+    border: 3px solid black;
+    margin: 4px;
+    font-weight: 600;
+    background: #bfbfbf;
+
+}
+.td-butn{
+    font-family: sans-serif;
+    padding: 0.5rem 0.5rem;
+    cursor: pointer;
+    background: black;
+    border: 0;
+    border-radius: 0.2rem;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: 0.3s background-color;
+    margin: 1px;
+    color: cornsilk;
+}
+.td-butn:hover{
+    background: #666666;
+}
+.profilBtn{
+    font-family: sans-serif;
+    padding: 1rem 1rem;
+    cursor: pointer;
+    background: linear-gradient(to bottom right, greenyellow, green);
+    border: 1px dotted;
+    border-radius: 0.2rem ;
+    font-size: 1.6rem;
+    font-weight: bold;
+    transition: 0.3s background-color;
+    margin: 10px;
+}
+.profilBtn:hover{
+    background: #666666;
+}
