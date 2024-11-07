@@ -10,12 +10,8 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(value = {"http://localhost:3000/", "http://192.168.178.254/"})
 public class UserResource {
 
-    private final UserService userService;
-
     @Autowired
-    public UserResource(UserService userService) {
-        this.userService = userService;
-    }
+    UserService userService;
 
     @PostMapping("/rejestracja")
     public String rejestracja(@RequestBody UserDTO user)

@@ -2,6 +2,7 @@ package com.cupofevents.control.user;
 
 import com.cupofevents.control.redis.RedisService;
 import com.cupofevents.entity.DTO.UserDTO;
+import com.cupofevents.infrastructure.mapper.RedisKeyMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,16 +19,14 @@ public class UserRepository {
 
     public void create(UserDTO userDTO) {
         userDTO.setUuid(UUID.randomUUID().toString());
-        String key = buildKey(userDTO.getImie());
+        String key = RedisKeyMapper.from(USER_PREFIX, userDTO.getImie());
         redisService.saveData(key, userDTO);
     }
 
     public Optional<UserDTO> findWithLogin(String login) {
-        String key = buildKey(login);
+        String key = RedisKeyMapper.from(USER_PREFIX, login);
         return redisService.getData(key, UserDTO.class);
     }
 
-    private String buildKey(String value) {
-        return USER_PREFIX + value.toLowerCase().trim();
-    }
+
 }

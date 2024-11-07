@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Slf4j
@@ -37,6 +38,10 @@ public class RedisService {
             return Optional.empty();
         }
         return Optional.of(objectMapper.convertValue(entries, targetClass));
+    }
+
+    public Set<String> getKeysByPattern(String pattern) {
+        return redisTemplate.keys(pattern);
     }
 
 }
