@@ -4,6 +4,7 @@ import com.cupofevents.control.ticket.TicketService;
 import com.cupofevents.entity.DTO.TicketDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
 
@@ -18,5 +19,12 @@ public class TicketResource {
     @GetMapping("{userName}/all")
     public List<TicketDTO> getTickets(@PathVariable("userName") String userName) {
         return ticketService.getUserTickets(userName);
+    }
+
+    @PostMapping("{userName}/{eventName}")
+    public SseEmitter saveTicket(@PathVariable("userName") String userName,
+                                 @PathVariable("eventName") String eventName) {
+        ticketService.saveTicketPurchaseInQueue(userName, eventName);
+        return ticketService.getEventListener(userName);
     }
 }

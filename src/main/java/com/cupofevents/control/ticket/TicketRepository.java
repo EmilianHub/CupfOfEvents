@@ -23,12 +23,27 @@ public class TicketRepository {
 
     public Set<String> getUserTickets(String user) {
         List<String> keyPatterns = List.of(MATCH_ALL_KEY_PATTERN, user);
-        String ticketKeysPattern = RedisKeyMapper.fromKeyPattern(KEY_PATTERN, keyPatterns);
+        String ticketKeysPattern = RedisKeyMapper.from(KEY_PATTERN, keyPatterns);
         return redisService.getKeysByPattern(ticketKeysPattern);
     }
 
     public Optional<TicketDTO> getTicketForEvent(String ticketName) {
         return redisService.getData(ticketName, TicketDTO.class);
+    }
+
+    public void addTicketPurchaseToQueue(String userName, TicketDTO ticketDTO) {
+        String ticketKey = RedisKeyMapper.from(KEY_PATTERN, List.of(userName, ticketDTO.getEvent()));
+        redisService.addToQueue(ticketKey, ticketDTO);
+    }
+
+    public void saveTicket(String userName, TicketDTO ticketDTO) {
+        ticketDTO.setStatus(TicketDTO.TicketStatus.DONE.name());
+        String ticketKey = RedisKeyMapper.from(KEY_PATTERN, List.of(userName, ticketDTO.getEvent()));
+        redisService.saveData(ticketKey, ticketDTO);
+    }
+
+    public Optional<TicketDTO> findTicketInQueue(String ticketKey) {
+        return redisService.findInQueue(ticketKey, TicketDTO.class);
     }
 
 }

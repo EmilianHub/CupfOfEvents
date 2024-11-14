@@ -29,7 +29,7 @@ public class EventRepository {
     }
 
     public Set<String> getAvailableEvents() {
-        String eventKeyPattern = RedisKeyMapper.fromKeyPattern(KEY_PATTERN, Collections.singletonList(MATCH_ALL_KEY_PATTERN));
+        String eventKeyPattern = RedisKeyMapper.from(KEY_PATTERN, Collections.singletonList(MATCH_ALL_KEY_PATTERN));
         return redisService.getKeysByPattern(eventKeyPattern);
     }
 }

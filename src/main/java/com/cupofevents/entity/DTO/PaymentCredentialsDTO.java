@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class PaymentCredentialsDTO {
 
-    private final String user;
     private final String dane;
+    private final String csv;
 
 }

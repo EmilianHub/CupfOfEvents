@@ -26,4 +26,15 @@ public class PaymentCredentialsResource {
             return ResponseEntity.noContent().build();
         }
     }
+
+    @PostMapping("{userName}/{eventName}")
+    public ResponseEntity payForPurchasedTicket(@PathVariable("userName") String userName,
+                                                @PathVariable("eventName") String eventName,
+                                                @RequestBody PaymentCredentialsDTO paymentCredentialsDTO) {
+        boolean isValid = paymentCredentialsService.payForPurchasedTicket(userName, eventName, paymentCredentialsDTO);
+        if (isValid) {
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.unprocessableEntity().build();
+    }
 }

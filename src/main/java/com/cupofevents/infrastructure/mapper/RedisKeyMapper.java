@@ -12,7 +12,7 @@ public class RedisKeyMapper {
         return prefix + suffix.toLowerCase().trim();
     }
 
-    public static String fromKeyPattern(String pattern, List<String> patternKeys) {
+    public static String from(String pattern, List<String> patternKeys) {
         return String.format(pattern, patternKeys.stream()
                 .map(String::toLowerCase)
                 .toArray());
