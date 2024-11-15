@@ -20,18 +20,13 @@ public class TicketAsyncEventObserver {
 
     @EventListener
     public void handleTicketPurchaseEvent(TicketAsyncEvent ticketAsyncEvent) {
-        String ticketQueueKey = buildTicketQueue(ticketAsyncEvent);
-        Optional<TicketDTO> ticketInQueue = ticketService.findTicketInQueue(ticketQueueKey);
+        Optional<TicketDTO> ticketInQueue = ticketService.findTicketInQueue(ticketAsyncEvent);
         ticketInQueue.ifPresent(ticket -> saveTicket(ticketAsyncEvent, ticket));
     }
 
     private void saveTicket(TicketAsyncEvent ticketAsyncEvent, TicketDTO ticketDTO) {
         ticketService.saveTicket(ticketAsyncEvent.getUserName(), ticketDTO);
         ticketService.sendTicketUpdate(ticketAsyncEvent.getUserName(), ticketDTO);
-    }
-
-    private String buildTicketQueue(TicketAsyncEvent ticketAsyncEvent) {
-        return RedisKeyMapper.from(ticketAsyncEvent.getKeyPrefix(), List.of(ticketAsyncEvent.getUserName(), ticketAsyncEvent.getEventName()));
     }
 
 }

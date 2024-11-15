@@ -52,4 +52,7 @@ public class RedisService {
         return Optional.ofNullable(objectMapper.convertValue(ticketEntity, targetClass));
     }
 
+    public void putBackToQueue(String ticketQueueKey, TicketDTO ticketDTO) {
+        redisTemplate.opsForList().rightPush(ticketQueueKey, ticketDTO);
+    }
 }
