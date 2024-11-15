@@ -19,7 +19,7 @@ const Navbar = () => {
     return (
         <nav className={"NavBarItems"}>
             <h1 className={"Logo"}>
-                Minutówka
+                CupOfEvents
             </h1>
             <ul className={"items-nav"}>
                     {navBar.map((key, value) => {
