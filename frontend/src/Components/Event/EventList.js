@@ -14,7 +14,8 @@ const EventList = () => {
     }, []);
 
     const handleEventClick = (eventName) => {
-        navigate(/event/${eventName});
+        let eventNameTrim = eventName.toString().replace(" ", "")
+        navigate(`/event/${eventNameTrim}`);
     };
 
     return (

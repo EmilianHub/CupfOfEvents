@@ -23,6 +23,9 @@ public class EventRepository {
     private final RedisService redisService;
 
     public EventDTO requireEvent(String eventName) {
+        if (!eventName.contains("event_")) {
+            eventName = RedisKeyMapper.from(KEY_PATTERN, eventName);
+        }
         return redisService.getData(eventName, EventDTO.class)
                 .orElseThrow(() -> CustomExceptionBuilder.getCustomException(HttpStatus.UNPROCESSABLE_ENTITY,
                 "Event with this name was expected to exist"));

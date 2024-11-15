@@ -44,34 +44,14 @@ export const NavBarDataUser = [
         link: "/"
     },
     {
-        name: "Pożyczki",
+        name: "Wydarzenia",
         img: <Loan/>,
-        link: "/strona-wez-kredyt",
+        link: "/wydarzenia",
     },
     {
-        name: "Kontakt",
+        name: "Profil",
         img: <ContactsIcon/>,
-        link: "/kontakt",
-    },
-    {
-        name: "Pomoc",
-        img: <HelpIcon/>,
-        link: "/pomoc",
-    },
-    {
-        name: "Regulamin",
-        img: <ReceiptIcon/>,
-        link: "/regulamin",
-    },
-    {
-        name: "Moje pozyczki",
-        img: <MonetizationOnIcon/>,
-        link: "/Profil"
-    },
-    {
-        name: "Moj profil",
-        img: <AccountCircleIcon/>,
-        link: "/PanelUzy"
+        link: "/profil",
     },
     {
         name: "Logout",

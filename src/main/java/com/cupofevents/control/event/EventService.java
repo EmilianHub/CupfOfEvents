@@ -17,7 +17,7 @@ public class EventService {
     private final EventRepository eventRepository;
 
     public EventDTO getEvent(String eventName) {
-        return eventRepository.requireEvent(eventName);
+        return eventRepository.requireEvent(eventName.toLowerCase());
     }
 
     public List<EventDTO> getAvailableEvents() {

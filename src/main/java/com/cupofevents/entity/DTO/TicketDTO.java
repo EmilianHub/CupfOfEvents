@@ -4,9 +4,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Builder
 @Getter
-public class TicketDTO {
+public class TicketDTO implements Serializable {
 
     private final String event;
     private final String userName;

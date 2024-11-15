@@ -15,9 +15,10 @@ export default function LogForm(){
             }
         ).then((response) => {
             console.log(response.data)
-            if (response.data === 0) {
+            if (response.data === "") {
                 window.alert(("złe dane"))
             } else {
+                console.log(response.data)
                 createNewCookie(response.data)
                 navigate("/")
                 window.location.reload(false)

@@ -6,6 +6,7 @@ import com.cupofevents.entity.DTO.TicketDTO;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.context.annotation.ApplicationScope;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -16,6 +17,7 @@ import java.util.stream.Collectors;
 @Service
 @ApplicationScope
 @AllArgsConstructor
+@CrossOrigin(value = {"http://localhost:3000/", "http://192.168.178.254/"})
 public class TicketService {
 
     private final Map<String, SseEmitter> emittersByUserName = new HashMap<>();
@@ -23,11 +25,7 @@ public class TicketService {
     private final EventService eventService;
 
     public Optional<TicketDTO> findTicketForEvent(String userName, String event) {
-        Set<String> userTickets = ticketRepository.getUserTickets(userName);
-        Optional<String> ticketForEvent = userTickets.stream()
-                .filter(userTicket -> userTicket.contains(event))
-                .findFirst();
-        return ticketForEvent.flatMap(ticketRepository::getTicketForEvent);
+        return ticketRepository.getTicketForEvent(userName, event);
     }
 
     public List<TicketDTO> getUserTickets(String userName) {
@@ -38,25 +36,7 @@ public class TicketService {
                 .collect(Collectors.toList());
     }
 
-    public SseEmitter getEventListener(String userName) {
-        SseEmitter ticketEmitter = new SseEmitter(300000L);
-        emittersByUserName.put(userName, ticketEmitter);
-
-        ticketEmitter.onCompletion(() -> emittersByUserName.remove(userName));
-        ticketEmitter.onTimeout(() -> sendTimeout(userName));
-
-        return ticketEmitter;
-    }
-
-    private void sendTimeout(String userName) {
-        TicketDTO timeoutTicket = TicketDTO.builder()
-                .status(TicketDTO.TicketStatus.TIMEOUT.name())
-                .build();
-        sendTicketUpdate(userName, timeoutTicket);
-        emittersByUserName.remove(userName);
-    }
-
-    public void saveTicketPurchaseInQueue(String userName, String eventName) {
+    public TicketDTO saveTicketPurchaseInQueue(String userName, String eventName) {
         EventDTO event = eventService.getEvent(eventName);
 
         TicketDTO ticketDto = TicketDTO.builder()
@@ -66,6 +46,7 @@ public class TicketService {
                 .build();
 
         ticketRepository.addTicketPurchaseToQueue(ticketDto);
+        return ticketDto;
     }
 
     public Optional<TicketDTO> findTicketInQueue(TicketAsyncEvent ticketAsyncEvent) {
@@ -82,8 +63,12 @@ public class TicketService {
     }
 
     private boolean isProperTicket(TicketDTO ticketDTO, TicketAsyncEvent ticketAsyncEvent) {
-        return ticketDTO.getUserName().equals(ticketAsyncEvent.getUserName()) &&
-                ticketDTO.getEvent().equals(ticketAsyncEvent.getEventName());
+        return ticketDTO.getUserName().equalsIgnoreCase(ticketAsyncEvent.getUserName()) &&
+                normalizeText(ticketDTO.getEvent()).equals(normalizeText(ticketAsyncEvent.getEventName()));
+    }
+
+    private String normalizeText(String text) {
+        return text.toLowerCase().replace(" ", "");
     }
 
     private void putBackTicketAndScheduleRetry(TicketDTO ticketDTO, TicketAsyncEvent ticketAsyncEvent) {
@@ -108,21 +93,10 @@ public class TicketService {
 
     private void processTicketSaveAfterRetry(TicketDTO ticketDTO, TicketAsyncEvent ticketAsyncEvent) {
         saveTicket(ticketAsyncEvent.getUserName(), ticketDTO);
-        sendTicketUpdate(ticketAsyncEvent.getUserName(), ticketDTO);
     }
 
     public void saveTicket(String userName, TicketDTO ticketDTO) {
         ticketRepository.saveTicket(userName, ticketDTO);
     }
 
-    public void sendTicketUpdate(String userName, TicketDTO ticketDTO) {
-        SseEmitter emitter = emittersByUserName.remove(userName);
-        if (emitter != null) {
-            try {
-                emitter.send(ticketDTO);
-            } catch (IOException e) {
-                emittersByUserName.remove(userName);
-            }
-        }
-    }
 }

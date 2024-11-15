@@ -27,6 +27,11 @@ public class TicketRepository {
         return redisService.getKeysByPattern(ticketKeysPattern);
     }
 
+    public Optional<TicketDTO> getTicketForEvent(String userName, String eventName) {
+        String userTicketKey = RedisKeyMapper.from(KEY_PATTERN, List.of(normalizeText(eventName), userName));
+        return redisService.getData(userTicketKey, TicketDTO.class);
+    }
+
     public Optional<TicketDTO> getTicketForEvent(String ticketName) {
         return redisService.getData(ticketName, TicketDTO.class);
     }
@@ -37,8 +42,12 @@ public class TicketRepository {
 
     public void saveTicket(String userName, TicketDTO ticketDTO) {
         ticketDTO.setStatus(TicketDTO.TicketStatus.DONE.name());
-        String ticketKey = RedisKeyMapper.from(KEY_PATTERN, List.of(userName, ticketDTO.getEvent()));
+        String ticketKey = RedisKeyMapper.from(KEY_PATTERN, List.of(normalizeText(ticketDTO.getEvent()), userName));
         redisService.saveData(ticketKey, ticketDTO);
+    }
+
+    private String normalizeText(String text) {
+        return text.toLowerCase().replace(" ", "");
     }
 
     public Optional<TicketDTO> findTicketInQueue() {

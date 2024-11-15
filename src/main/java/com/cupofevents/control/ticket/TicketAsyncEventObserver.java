@@ -26,7 +26,6 @@ public class TicketAsyncEventObserver {
 
     private void saveTicket(TicketAsyncEvent ticketAsyncEvent, TicketDTO ticketDTO) {
         ticketService.saveTicket(ticketAsyncEvent.getUserName(), ticketDTO);
-        ticketService.sendTicketUpdate(ticketAsyncEvent.getUserName(), ticketDTO);
     }
 
 }

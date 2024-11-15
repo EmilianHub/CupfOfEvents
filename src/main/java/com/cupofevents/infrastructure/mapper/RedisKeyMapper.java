@@ -9,7 +9,7 @@ import java.util.List;
 public class RedisKeyMapper {
 
     public static String from(String prefix, String suffix) {
-        return prefix + suffix.toLowerCase().trim();
+        return String.format(prefix, suffix.toLowerCase().trim());
     }
 
     public static String from(String pattern, List<String> patternKeys) {

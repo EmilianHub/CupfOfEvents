@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class UserRepository {
 
-    private final static String USER_PREFIX = "user_";
+    private final static String USER_PREFIX = "user_%s";
 
     private final RedisService redisService;
 
