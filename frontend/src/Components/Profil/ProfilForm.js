@@ -1,59 +1,80 @@
-import React, {useEffect, useState} from "react";
-import axios from "axios";
-import "./ProfilForm.css";
-import {useNavigate} from "react-router-dom";
-import {readCookie} from "../CookiesManager/CookiesManager";
-export default function ProfilForm(){
+import React, { useState, useEffect } from 'react';
+import { readCookie } from "../CookiesManager/CookiesManager";
+import './ProfilForm.css';
 
-    let navigate = useNavigate();
-    const userId = readCookie();
-    const [pozyczki, setPozyczki]= useState([]);
+const ProfilForm = () => {
+    const [tickets, setTickets] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    function Dane(){
-        axios.post(`http://localhost:8080/profil/${userId}`
-        ).then(response => {
-            setPozyczki(response.data)
-            console.log(pozyczki)
-        })
-    }
-    useEffect(()=> {
-        Dane();
-    },[userId])
+    useEffect(() => {
+        const userName = readCookie();
+        if (!userName) {
+            setError("Nie znaleziono nazwy użytkownika w ciasteczkach");
+            setLoading(false);
+            return;
+        }
 
-    function refreshPage() {
-        window.location.reload(false);
-    }
-    console.log(pozyczki)
-    return(
-        <div className={"cala"}>
-        <table className={"ProfilCont"}>
-            {/*<div className={"profilH1"}> Profil użytkownika </div>
-            <div className={"profilTable"}>*/}
-            <h1  className={"profilH1"}> <button className={"profilBtn"} onClick={refreshPage}>Pokaż aktywne pożyczki</button> </h1>
-            <tbody>
+        fetch(`http://localhost:8080/ticket/${userName}/all`)
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(`Błąd HTTP: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then((data) => {
+                setTickets(data);
+                setLoading(false);
+            })
+            .catch((error) => {
+                console.error("Błąd pobierania biletów:", error);
+                setError("Nie udało się pobrać biletów.");
+                setLoading(false);
+            });
+    }, []);
+
+    if (loading) return <p>Ładowanie biletów...</p>;
+    if (error) return <p>{error}</p>;
+
+    return (
+        <div className="tickets-container">
+            <h2>Posiadane Bilety</h2>
+            {tickets.length === 0 ? (
+                <p>Nie masz jeszcze żadnych biletów.</p>
+            ) : (
+                <table className="tickets-table">
+                    <thead>
                     <tr>
-        <th className={"cth"}>Nr pożyczki </th>
-        <th className={"cth"}> Data zaciągnięcia </th>
-        <th className={"cth"}>Kwota pożyczki </th>
-        <th className={"cth"}>Data zakończenia </th>
-        <th className={"cth"}> Wysokość raty</th>
-        <th className={"cth"}> Status pożyczki </th>
-        <th className={"cth"}> Spłać ratę</th>
-    </tr>
-
-        {pozyczki.map((value) =>{
-           return <tr>
-                <td className={"ctd"}> {value.id}.</td>
-                <td className={"ctd"}> {value.dataZaciagnieciaPozyczki}</td>
-                <td className={"ctd"}> {value.kwotaPozyczki} PLN</td>
-                <td className={"ctd"}> {value.dataZakonczeniaPozyczki}</td>
-                <td className={"ctd"}> {value.rata} PLN</td>
-                <td className={"ctd"}> {value.active ? "Aktywna" : "Splacona"}</td>
-                <td className={"ctd"}> <button className={"td-butn"} disabled={!value.active} onClick={() => navigate(`/splacKredyt/${value.id}`)}>Spłać</button></td>
-            </tr>
-        })}
-            </tbody>
-        </table>
+                        <th>Wydarzenie</th>
+                        <th>Data</th>
+                        <th>Status</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {tickets.map((ticket, index) => (
+                        <tr key={index}>
+                            <td>{ticket.event}</td>
+                            <td>{ticket.data}</td>
+                            <td>
+                                    <span
+                                        className={
+                                            ticket.status === "done"
+                                                ? "status-done"
+                                                : ticket.status === "pending"
+                                                    ? "status-pending"
+                                                    : "status-failed"
+                                        }
+                                    >
+                                        {ticket.status}
+                                    </span>
+                            </td>
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+            )}
         </div>
-    )
-}
+    );
+};
+
+export default ProfilForm;

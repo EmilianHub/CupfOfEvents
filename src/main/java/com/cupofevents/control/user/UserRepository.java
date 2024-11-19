@@ -19,7 +19,7 @@ public class UserRepository {
 
     public void create(UserDTO userDTO) {
         userDTO.setUuid(UUID.randomUUID().toString());
-        String key = RedisKeyMapper.from(USER_PREFIX, userDTO.getImie());
+        String key = RedisKeyMapper.from(USER_PREFIX, userDTO.getLogin());
         redisService.saveData(key, userDTO);
     }
 

@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -54,5 +55,9 @@ public class RedisService {
 
     public void putBackToQueue(String ticketQueueKey, TicketDTO ticketDTO) {
         redisTemplate.opsForList().rightPush(ticketQueueKey, ticketDTO);
+    }
+
+    public void setExpiration(String key, Date expiration) {
+        redisTemplate.expireAt(key, expiration);
     }
 }

@@ -4,13 +4,13 @@ import com.cupofevents.control.event.EventService;
 import com.cupofevents.entity.DTO.EventDTO;
 import com.cupofevents.entity.DTO.TicketDTO;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.context.annotation.ApplicationScope;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 @ApplicationScope
 @AllArgsConstructor
 @CrossOrigin(value = {"http://localhost:3000/", "http://192.168.178.254/"})
+@Slf4j
 public class TicketService {
 
     private final Map<String, SseEmitter> emittersByUserName = new HashMap<>();
@@ -81,7 +82,7 @@ public class TicketService {
         try {
             Thread.sleep(15000); // Opóźnienie 15 sekund
         } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+            log.info("Thread interrupted {}", e.getMessage());
         }
         processEventAgain(ticketAsyncEvent);
     }

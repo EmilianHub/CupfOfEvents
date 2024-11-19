@@ -1,79 +1,49 @@
-.ProfilCont{
-    padding-top: 7%;
-    display: block;
+.tickets-container {
     max-width: 800px;
-    text-align: center;
-    margin-left: 14%;
+    margin: 5vh auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
 
-}
-.cala{
-    background-color: #FFEBCD;
-    height: 910px;
-}
-.profilH1{
-    font-weight: bold;
-    font-size: 44px;
+.tickets-container h2 {
     text-align: center;
-    display: flex;
-    flex-direction: row;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.tickets-table {
     width: 100%;
-    justify-content: center;
-    margin-left: 14%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 16px;
+    text-align: left;
 }
-.cth{
-    font-size: 32px;
-    border: 3px solid black;
-    margin: 4px;
-    text-align: center;
-    background: greenyellow;
-    font-weight: 800;
-    padding: 3px;
-}
-.profilTable{
-    text-align: center;
-    font-weight: 500;
-    display: block;
-    padding-left: 2px;
-    padding-bottom: 8px;
-    #margin-right: auto;
-    #margin-left: auto;
-}
-.ctd{
-    font-size: 26px;
-    border: 3px solid black;
-    margin: 4px;
-    font-weight: 600;
-    background: #bfbfbf;
 
+.tickets-table th,
+.tickets-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
 }
-.td-butn{
-    font-family: sans-serif;
-    padding: 0.5rem 0.5rem;
-    cursor: pointer;
-    background: black;
-    border: 0;
-    border-radius: 0.2rem;
-    font-size: 1rem;
+
+.tickets-table th {
+    background-color: #f4f4f4;
+    color: #333;
     font-weight: bold;
-    transition: 0.3s background-color;
-    margin: 1px;
-    color: cornsilk;
 }
-.td-butn:hover{
-    background: #666666;
-}
-.profilBtn{
-    font-family: sans-serif;
-    padding: 1rem 1rem;
-    cursor: pointer;
-    background: linear-gradient(to bottom right, greenyellow, green);
-    border: 1px dotted;
-    border-radius: 0.2rem ;
-    font-size: 1.6rem;
+
+.status-done {
+    color: green;
     font-weight: bold;
-    transition: 0.3s background-color;
-    margin: 10px;
 }
-.profilBtn:hover{
-    background: #666666;
+
+.status-pending {
+    color: orange;
+    font-weight: bold;
+}
+
+.status-failed {
+    color: red;
+    font-weight: bold;
 }

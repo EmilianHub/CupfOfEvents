@@ -4,7 +4,6 @@ import { readCookie } from "../CookiesManager/CookiesManager";
 import "./PaymentForm.css"
 
 const PaymentForm = () => {
-    const location = useLocation();
     const navigate = useNavigate();
     const maxTries = 10;
     let i = 0;
@@ -18,7 +17,6 @@ const PaymentForm = () => {
         surname: ''
     });
     const [paymentStatus, setPaymentStatus] = useState('Oczekiwanie na płatność...');
-    const [eventSource, setEventSource] = useState(null);
 
     // Obsługa zmian w formularzu
     const handleChange = (e) => {
@@ -52,7 +50,7 @@ const PaymentForm = () => {
             .then(response => {
                 if (response.ok) {
                     setPaymentStatus('Płatność zakończona sukcesem!');
-                    saveTicket()
+                    saveTicket(i)
                 } else {
                     setPaymentStatus('Błąd płatności, spróbuj ponownie.');
                 }
@@ -63,17 +61,18 @@ const PaymentForm = () => {
             });
     };
 
-    // Inicjalizacja EventSource na podstawie `SseEmitter` po załadowaniu komponentu
-    const saveTicket = (i) => {
+    const saveTicket = (tries) => {
+        console.log(`i ${tries}`)
             fetch(`http://localhost:8080/ticket/single/${userName}/${eventName}`)
                 .then(response => {
                     console.log(response.status)
                     if (response.status === 200) {
                         alert('Bilety zostały przypisane do twojego konta');
-                    } else if (i === maxTries) {
+                        navigate(`/profil`)
+                    } else if (tries === maxTries) {
                         alert('Coś poszło nie tak płatnośc zostanie zwrócona');
                     } else {
-                        saveTicket(i++)
+                        saveTicket(tries++)
                     }
                 })
                 .catch(error => {

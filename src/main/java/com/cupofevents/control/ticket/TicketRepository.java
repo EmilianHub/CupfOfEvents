@@ -4,9 +4,15 @@ import com.cupofevents.control.redis.RedisService;
 import com.cupofevents.entity.DTO.TicketDTO;
 import com.cupofevents.infrastructure.mapper.RedisKeyMapper;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.ApplicationScope;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -14,11 +20,14 @@ import java.util.Set;
 @Service
 @ApplicationScope
 @AllArgsConstructor
+@Slf4j
 public class TicketRepository {
 
     private static final String KEY_PATTERN = "bilet_%s_%s";
     private static final String MATCH_ALL_KEY_PATTERN = "*";
     private static final String TICKET_QUEUE_KEY = "kolejka_biletow";
+
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
     private final RedisService redisService;
 
     public Set<String> getUserTickets(String user) {
@@ -44,6 +53,19 @@ public class TicketRepository {
         ticketDTO.setStatus(TicketDTO.TicketStatus.DONE.name());
         String ticketKey = RedisKeyMapper.from(KEY_PATTERN, List.of(normalizeText(ticketDTO.getEvent()), userName));
         redisService.saveData(ticketKey, ticketDTO);
+
+        Date expirationDate = getExpirationDate(ticketDTO);
+        redisService.setExpiration(ticketKey, expirationDate);
+    }
+
+    private Date getExpirationDate(TicketDTO ticketDTO) {
+        try {
+            LocalDate localDate = LocalDate.parse(ticketDTO.getData(), formatter);
+            return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        } catch (Exception e) {
+            log.info("Date format exception {}", e.getMessage());
+        }
+        return new Date(999999);
     }
 
     private String normalizeText(String text) {
